@@ -30,6 +30,7 @@ data TS = TS {tiles :: Map
 defaultStats :: Stats
 defaultStats = Stats {sKill =0, dKill =0, vBitten =0, hBitten =0, hMove = 0, zMove = 0, vMove = 0}
 
+-- new empty game
 newGame ::[(Int,Int)] -> Int -> Int -> Int -> TS
 newGame map x y z = TS {tiles = Map {zombies = take x map
                                 ,hunters = take y (drop x map)
@@ -41,10 +42,12 @@ newGame map x y z = TS {tiles = Map {zombies = take x map
 --getCreature :: Ts ->(Map -> []  -> [(Int,Int)]
 getCList ts creature= creature (tiles ts)
 
-   
+-- list of every position as in pair   
 mapList :: [(Int,Int)]
 mapList = foldl(++) [(x,y) | x <- take 20 [0..], y <- take 20 [0..]] []
 
+
+-- movement step for every creature entry
 moveMap :: TS -> TS 
 moveMap ts = let zombiemoveTs = foldl(\acc (x,y) -> zombieMove acc x y) ts (zombies (tiles ts))
                  huntermoveTs = foldl(\acc (x,y) -> hunterMove acc x y) zombiemoveTs (hunters (tiles ts))
@@ -203,7 +206,7 @@ prettyMap ts = let emptyMap = zip mapList (cycle [E])
   
   
   
-
+-- shuffle list with IO
 shuffle :: [a] -> IO [a]
 shuffle xs = do
   ar <- newArray n xs
